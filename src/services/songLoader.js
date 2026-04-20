@@ -1,19 +1,21 @@
-const MANIFEST_URL = '/songs/index.json';
+// Los paths del manifest son absolutos tipo "/songs/foo.song".
+// En GH Pages la app vive bajo un sub-path — resolvemos contra import.meta.env.BASE_URL.
+const BASE = import.meta.env.BASE_URL || '/';
 
-/**
- * Descarga el manifest remoto de cantos.
- */
-export async function fetchManifest(baseUrl = '') {
-  const res = await fetch(`${baseUrl}${MANIFEST_URL}`, { cache: 'no-cache' });
+function resolve(path) {
+  if (/^https?:/.test(path)) return path;
+  const clean = path.startsWith('/') ? path.slice(1) : path;
+  return `${BASE.endsWith('/') ? BASE : `${BASE}/`}${clean}`;
+}
+
+export async function fetchManifest() {
+  const res = await fetch(resolve('/songs/index.json'), { cache: 'no-cache' });
   if (!res.ok) throw new Error(`No se pudo cargar manifest (${res.status})`);
   return res.json();
 }
 
-/**
- * Descarga el contenido crudo de un canto.
- */
-export async function fetchSongRaw(fileUrl, baseUrl = '') {
-  const res = await fetch(`${baseUrl}${fileUrl}`);
+export async function fetchSongRaw(fileUrl) {
+  const res = await fetch(resolve(fileUrl));
   if (!res.ok) throw new Error(`No se pudo cargar canto ${fileUrl} (${res.status})`);
   return res.text();
 }

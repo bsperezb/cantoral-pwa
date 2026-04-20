@@ -2,7 +2,11 @@ import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { VitePWA } from 'vite-plugin-pwa';
 
+// En GH Pages la app vive bajo /cantoral-pwa/; en dev/preview local, bajo /.
+const base = process.env.GITHUB_PAGES === 'true' ? '/cantoral-pwa/' : '/';
+
 export default defineConfig({
+  base,
   plugins: [
     vue(),
     VitePWA({
@@ -17,13 +21,13 @@ export default defineConfig({
         background_color: '#ffffff',
         display: 'standalone',
         orientation: 'portrait',
-        start_url: '/',
-        scope: '/',
+        start_url: base,
+        scope: base,
         icons: [
-          { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
-          { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+          { src: `${base}icons/icon-192.png`, sizes: '192x192', type: 'image/png', purpose: 'any' },
+          { src: `${base}icons/icon-512.png`, sizes: '512x512', type: 'image/png', purpose: 'any' },
           {
-            src: '/icons/icon-maskable-512.png',
+            src: `${base}icons/icon-maskable-512.png`,
             sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable',
@@ -32,6 +36,7 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,webmanifest}'],
+        navigateFallback: `${base}index.html`,
         runtimeCaching: [
           {
             urlPattern: /\/songs\/index\.json$/,
