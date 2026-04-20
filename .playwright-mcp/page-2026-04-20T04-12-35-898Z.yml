@@ -1,0 +1,55 @@
+- generic [ref=e3]:
+  - link "Saltar al contenido" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e5]:
+    - link "Cantoral" [ref=e6] [cursor=pointer]:
+      - /url: /
+      - img [ref=e7]
+      - generic [ref=e11]: Cantoral
+    - navigation "Navegación principal" [ref=e12]:
+      - link "Offline" [ref=e13] [cursor=pointer]:
+        - /url: /offline
+        - img [ref=e14]
+      - link "Ajustes" [ref=e17] [cursor=pointer]:
+        - /url: /ajustes
+        - img [ref=e18]
+  - main [ref=e21]:
+    - generic [ref=e22]:
+      - generic [ref=e23]:
+        - img [ref=e25]
+        - searchbox "Buscar canto" [ref=e28]
+      - group "Filtrar por categoría" [ref=e29]:
+        - button "Todas" [pressed] [ref=e30] [cursor=pointer]
+        - button "Adoración" [ref=e31] [cursor=pointer]
+        - button "Comunión" [ref=e32] [cursor=pointer]
+        - button "Entrada" [ref=e33] [cursor=pointer]
+        - button "Salida" [ref=e34] [cursor=pointer]
+      - list [ref=e35]:
+        - listitem [ref=e36]:
+          - link "Como el Ciervo Marcos Witt adoracion entrada" [ref=e37] [cursor=pointer]:
+            - /url: /canto/como-el-ciervo
+            - img [ref=e39]
+            - generic [ref=e43]:
+              - heading "Como el Ciervo" [level=3] [ref=e44]
+              - paragraph [ref=e45]: Marcos Witt
+              - generic [ref=e46]:
+                - generic [ref=e47]: adoracion
+                - generic [ref=e48]: entrada
+        - listitem [ref=e49]:
+          - link "Mi Historia Entre Tus Dedos Gianluca Grignani" [ref=e50] [cursor=pointer]:
+            - /url: /canto/mi-historia-entre-tus-dedos
+            - img [ref=e52]
+            - generic [ref=e56]:
+              - heading "Mi Historia Entre Tus Dedos" [level=3] [ref=e57]
+              - paragraph [ref=e58]: Gianluca Grignani
+        - listitem [ref=e59]:
+          - link "Tú Estás Aquí Marco Barrientos adoracion" [ref=e60] [cursor=pointer]:
+            - /url: /canto/tu-estas-aqui
+            - img [ref=e62]
+            - generic [ref=e66]:
+              - heading "Tú Estás Aquí" [level=3] [ref=e67]
+              - paragraph [ref=e68]: Marco Barrientos
+              - generic [ref=e70]: adoracion
+  - dialog [ref=e71]:
+    - paragraph [ref=e72]: Instala Cantoral en tu dispositivo para acceso offline completo.
+    - button "Instalar" [ref=e73] [cursor=pointer]

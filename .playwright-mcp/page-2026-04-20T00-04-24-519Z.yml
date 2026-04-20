@@ -1,0 +1,37 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - link "Cantoral" [ref=e5] [cursor=pointer]:
+      - /url: /
+      - img [ref=e6]
+      - generic [ref=e10]: Cantoral
+    - navigation "Navegación principal" [ref=e11]:
+      - link "Offline" [ref=e12] [cursor=pointer]:
+        - /url: /offline
+        - img [ref=e13]
+      - link "Ajustes" [ref=e16] [cursor=pointer]:
+        - /url: /ajustes
+        - img [ref=e17]
+  - main [ref=e20]:
+    - generic [ref=e21]:
+      - generic [ref=e22]:
+        - img [ref=e24]
+        - searchbox "Buscar canto" [active] [ref=e27]: ciervo
+        - button "Limpiar búsqueda" [ref=e70] [cursor=pointer]:
+          - img [ref=e71]
+      - group "Filtrar por categoría" [ref=e28]:
+        - button "Todas" [pressed] [ref=e29] [cursor=pointer]
+        - button "Entrada" [ref=e66] [cursor=pointer]
+        - button "Adoración" [ref=e67] [cursor=pointer]
+        - button "Comunión" [ref=e68] [cursor=pointer]
+        - button "Salida" [ref=e69] [cursor=pointer]
+      - list [ref=e30]:
+        - listitem [ref=e31]:
+          - link "Como el Ciervo Marcos Witt adoracion entrada" [ref=e32] [cursor=pointer]:
+            - /url: /canto/como-el-ciervo
+            - img [ref=e34]
+            - generic [ref=e38]:
+              - heading "Como el Ciervo" [level=3] [ref=e39]
+              - paragraph [ref=e40]: Marcos Witt
+              - generic [ref=e41]:
+                - generic [ref=e42]: adoracion
+                - generic [ref=e43]: entrada

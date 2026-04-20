@@ -1,0 +1,52 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - link "Cantoral" [ref=e5] [cursor=pointer]:
+      - /url: /
+      - img [ref=e6]
+      - generic [ref=e10]: Cantoral
+    - navigation "Navegación principal" [ref=e11]:
+      - link "Offline" [ref=e12] [cursor=pointer]:
+        - /url: /offline
+        - img [ref=e13]
+      - link "Ajustes" [ref=e16] [cursor=pointer]:
+        - /url: /ajustes
+        - img [ref=e17]
+  - main [ref=e20]:
+    - generic [ref=e21]:
+      - generic [ref=e22]:
+        - heading "Cantos disponibles offline" [level=2] [ref=e23]
+        - paragraph [ref=e24]: 1 de 3 descargados · 1.3 KB
+      - generic [ref=e25]:
+        - button "Descargar todo" [ref=e26] [cursor=pointer]:
+          - img [ref=e27]
+          - text: Descargar todo
+        - button "Eliminar todo" [ref=e30] [cursor=pointer]:
+          - img [ref=e31]
+          - text: Eliminar todo
+        - button "Refrescar manifest" [ref=e33] [cursor=pointer]
+      - list [ref=e34]:
+        - listitem [ref=e35]:
+          - generic [ref=e36]:
+            - paragraph [ref=e37]: Como el Ciervo
+            - paragraph [ref=e38]: Marcos Witt
+          - generic [ref=e39]:
+            - generic [ref=e40]: 377 B
+            - generic "Descargar canto" [ref=e41] [cursor=pointer]:
+              - checkbox "Descargar canto"
+        - listitem [ref=e44]:
+          - generic [ref=e45]:
+            - paragraph [ref=e46]: Mi Historia Entre Tus Dedos
+            - paragraph [ref=e47]: Gianluca Grignani
+          - generic [ref=e48]:
+            - generic [ref=e49]: ✓ Offline
+            - generic [ref=e50]: 1.3 KB
+            - generic "Descargar canto" [ref=e51] [cursor=pointer]:
+              - checkbox "Descargar canto" [checked]
+        - listitem [ref=e54]:
+          - generic [ref=e55]:
+            - paragraph [ref=e56]: Tú Estás Aquí
+            - paragraph [ref=e57]: Marco Barrientos
+          - generic [ref=e58]:
+            - generic [ref=e59]: 356 B
+            - generic "Descargar canto" [ref=e60] [cursor=pointer]:
+              - checkbox "Descargar canto"

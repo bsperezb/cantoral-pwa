@@ -1,0 +1,13 @@
+node_modules
+dist
+dist-ssr
+coverage
+storybook-static
+*.local
+.DS_Store
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea
+*.log
+public/songs/index.json

@@ -1,0 +1,55 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - link "Cantoral" [ref=e5] [cursor=pointer]:
+      - /url: /
+      - img [ref=e6]
+      - generic [ref=e10]: Cantoral
+    - navigation "Navegación principal" [ref=e11]:
+      - link "Offline" [ref=e12] [cursor=pointer]:
+        - /url: /offline
+        - img [ref=e13]
+      - link "Ajustes" [ref=e16] [cursor=pointer]:
+        - /url: /ajustes
+        - img [ref=e17]
+  - main [ref=e20]:
+    - generic [ref=e21]:
+      - navigation [ref=e22]:
+        - link "Volver" [ref=e23] [cursor=pointer]:
+          - /url: /
+          - img [ref=e24]
+          - generic [ref=e26]: Volver
+      - group "Controles de transposición" [ref=e28]:
+        - button "Bajar medio tono" [ref=e29] [cursor=pointer]:
+          - img [ref=e30]
+        - 'button "Transposición actual: 0 semitonos. Restablecer" [ref=e31] [cursor=pointer]': "0"
+        - button "Subir medio tono" [ref=e32] [cursor=pointer]:
+          - img [ref=e33]
+        - button "Cambiar notación" [ref=e34] [cursor=pointer]: Do Re Mi
+      - article [ref=e35]:
+        - generic [ref=e36]:
+          - heading "Como el Ciervo" [level=1] [ref=e37]
+          - paragraph [ref=e38]: Marcos Witt
+          - generic [ref=e39]:
+            - generic [ref=e40]:
+              - text: "Tonalidad:"
+              - strong [ref=e41]: G
+            - generic [ref=e42]:
+              - text: "Tempo:"
+              - strong [ref=e43]: "70"
+        - generic [ref=e44]:
+          - generic [ref=e45]:
+            - heading "Verso" [level=2] [ref=e46]
+            - generic [ref=e47]:
+              - generic [ref=e48]: Sol Mim
+              - paragraph [ref=e49]: Como el ciervo busca
+            - generic [ref=e50]:
+              - generic [ref=e51]: Do Re
+              - paragraph [ref=e52]: Por las aguas sediento
+          - generic [ref=e53]:
+            - heading "Coro" [level=2] [ref=e54]
+            - generic [ref=e55]:
+              - generic [ref=e56]: Sol Mim
+              - paragraph [ref=e57]: Así, Señor, te busco
+            - generic [ref=e58]:
+              - generic [ref=e59]: Do Re Sol
+              - paragraph [ref=e60]: A Ti solo mi Dios adoraré

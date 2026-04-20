@@ -1,0 +1,64 @@
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - link "Cantoral" [ref=e5] [cursor=pointer]:
+      - /url: /
+      - img [ref=e6]
+      - generic [ref=e10]: Cantoral
+    - navigation "Navegación principal" [ref=e11]:
+      - link "Offline" [ref=e12] [cursor=pointer]:
+        - /url: /offline
+        - img [ref=e13]
+      - link "Ajustes" [ref=e16] [cursor=pointer]:
+        - /url: /ajustes
+        - img [ref=e17]
+  - main [ref=e20]:
+    - generic [ref=e21]:
+      - navigation [ref=e22]:
+        - link "Volver" [ref=e23] [cursor=pointer]:
+          - /url: /
+          - img [ref=e24]
+          - generic [ref=e26]: Volver
+      - group "Controles de transposición" [ref=e28]:
+        - button "Bajar medio tono" [ref=e29] [cursor=pointer]:
+          - img [ref=e30]
+        - 'button "Transposición actual: 1 semitonos. Restablecer" [ref=e72] [cursor=pointer]': "+1"
+        - button "Subir medio tono" [active] [ref=e32] [cursor=pointer]:
+          - img [ref=e33]
+        - button "Cambiar notación" [ref=e34] [cursor=pointer]: C D E
+      - article [ref=e35]:
+        - generic [ref=e36]:
+          - heading "Mi Historia Entre Tus Dedos" [level=1] [ref=e37]
+          - paragraph [ref=e38]: Gianluca Grignani
+          - generic [ref=e40]:
+            - text: "Tonalidad:"
+            - strong [ref=e41]: Dm7
+        - generic [ref=e42]:
+          - generic [ref=e43]:
+            - heading "Intro" [level=2] [ref=e44]
+            - paragraph [ref=e45]:
+              - generic [ref=e46]: D#m7·
+              - generic [ref=e47]: G#·
+              - generic [ref=e48]: C#maj7·
+              - generic [ref=e49]: F#maj7
+          - generic [ref=e50]:
+            - heading "Verso" [level=2] [ref=e51]
+            - generic [ref=e52]:
+              - generic [ref=e53]: D#m7 G# C#maj7 F#maj7
+              - paragraph [ref=e54]: Yo pienso que, no son tan inútiles las noches que te di
+            - generic [ref=e55]:
+              - generic [ref=e56]: D#m7 G# C#maj7 F#maj7
+              - paragraph [ref=e57]: Te marchas y qué, yo ni intento discutírtelo, lo sabes y lo sé
+          - generic [ref=e58]:
+            - heading "CORO" [level=2] [ref=e59]
+            - generic [ref=e60]:
+              - generic [ref=e61]: C#
+              - paragraph [ref=e62]: Hay una cosa que yo no te he dicho aún
+            - generic [ref=e63]:
+              - generic [ref=e64]: G#
+              - paragraph [ref=e65]: Que mis problemas sabes que se llaman tú
+            - generic [ref=e66]:
+              - generic [ref=e67]: B A#m
+              - paragraph [ref=e68]: Sólo por eso tú me ves hacerme el duro
+            - generic [ref=e69]:
+              - generic [ref=e70]: F#maj7 G#
+              - paragraph [ref=e71]: Para sentirme un poquito más seguro.
