@@ -11,3 +11,7 @@ storybook-static
 .idea
 *.log
 public/songs/index.json
+
+*storybook.log
+
+design/
