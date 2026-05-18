@@ -23,7 +23,7 @@ defineProps({
   font-family: var(--font-mono);
   color: var(--color-chord);
   font-weight: 700;
-  font-size: var(--font-size-sm);
+  font-size: calc(var(--font-size-sm) * var(--song-fit-scale, 1));
 }
 .chord-line__sep {
   margin-left: var(--space-2);

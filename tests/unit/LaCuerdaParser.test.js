@@ -64,3 +64,51 @@ describe('parseLaCuerda con el ejemplo real', () => {
     expect(song.sourceFormat).toBe('lacuerda');
   });
 });
+
+describe('parseLaCuerda con acordes latinos en MAYÚSCULAS', () => {
+  const sample = `=====================================================================
+| ARTISTA: Test                                                     |
+| CANCION: TEST                                                     |
+=====================================================================
+
+ DO          LAm          REm        SOL
+Pan transformado en el cuerpo de Cristo
+
+*Coro*
+
+LAm     SOL     FA      DO
+Eucaristía milagro de amor
+
+guitar_man_10@hotmail.com
+
+Demos Gracias a Dios por la vida!!
+`;
+
+  it('normaliza acordes latinos a forma canónica (Do, Lam, Rem, Sol)', () => {
+    const song = parseLaCuerda(sample);
+    const allChords = song.sections
+      .flatMap((s) => s.lines)
+      .flatMap((l) => l.chords ?? [])
+      .map((c) => c.chord);
+    expect(allChords).toContain('Do');
+    expect(allChords).toContain('Lam');
+    expect(allChords).toContain('Rem');
+    expect(allChords).toContain('Sol');
+    expect(allChords).toContain('Fa');
+  });
+
+  it('detecta *Coro* como sección referencia', () => {
+    const song = parseLaCuerda(sample);
+    const ref = song.sections.find((s) => s.isReference);
+    expect(ref).toBeDefined();
+    expect(ref.type).toBe('chorus');
+    expect(ref.label).toBe('Coro');
+  });
+
+  it('recorta comentarios finales con email', () => {
+    const song = parseLaCuerda(sample);
+    const stringified = JSON.stringify(song);
+    expect(stringified).not.toContain('hotmail.com');
+    expect(stringified).not.toContain('Demos Gracias');
+  });
+});

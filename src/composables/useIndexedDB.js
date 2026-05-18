@@ -1,13 +1,14 @@
 import { openDB } from 'idb';
 
 const DB_NAME = 'cantoral-db';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 export const STORES = {
   songs: 'songs', // key: id, value: { id, raw, parsed, hash, downloadedAt }
   categories: 'categories', // key: id, value: { id, name, subcategories }
   preferences: 'preferences', // key: name, value
   offlineMeta: 'offlineMeta', // key: id, value: { id, downloadedAt, size }
+  repertoires: 'repertoires', // key: id, value: { id, name, templateType, moments, createdAt, updatedAt }
 };
 
 let dbPromise = null;
@@ -27,6 +28,9 @@ function initDB() {
         }
         if (!db.objectStoreNames.contains(STORES.offlineMeta)) {
           db.createObjectStore(STORES.offlineMeta, { keyPath: 'id' });
+        }
+        if (!db.objectStoreNames.contains(STORES.repertoires)) {
+          db.createObjectStore(STORES.repertoires, { keyPath: 'id' });
         }
       },
     });

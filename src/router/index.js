@@ -27,6 +27,23 @@ const routes = [
     name: 'settings',
     component: () => import('../views/SettingsView.vue'),
   },
+  {
+    path: '/repertorios',
+    name: 'repertoires',
+    component: () => import('../views/RepertoiresListView.vue'),
+  },
+  {
+    path: '/repertorios/:id/editar',
+    name: 'repertoire-edit',
+    component: () => import('../views/RepertoireEditorView.vue'),
+    props: true,
+  },
+  {
+    path: '/repertorios/:id/presentar',
+    name: 'repertoire-present',
+    component: () => import('../views/RepertoirePresentView.vue'),
+    props: true,
+  },
 ];
 
 export const router = createRouter({

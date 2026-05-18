@@ -4,6 +4,7 @@ import { onMounted } from 'vue';
 import { useOfflineManager } from './composables/useOfflineManager.js';
 import { useInstallPrompt } from './composables/useInstallPrompt.js';
 import BaseIcon from './components/atoms/BaseIcon.vue';
+import AppNav from './components/molecules/AppNav.vue';
 
 const { initAutoDownloadOnInstall } = useOfflineManager();
 const { installable, promptInstall } = useInstallPrompt();
@@ -16,19 +17,13 @@ onMounted(() => {
 <template>
   <div class="app-shell">
     <a href="#main-content" class="skip-link">Saltar al contenido</a>
+
     <header class="app-shell__header">
       <RouterLink :to="{ name: 'home' }" class="app-shell__brand">
         <BaseIcon name="music" :size="22" />
         <span>Cantoral</span>
       </RouterLink>
-      <nav class="app-shell__nav" aria-label="Navegación principal">
-        <RouterLink :to="{ name: 'offline-manager' }" aria-label="Offline">
-          <BaseIcon name="download" :size="20" />
-        </RouterLink>
-        <RouterLink :to="{ name: 'settings' }" aria-label="Ajustes">
-          <BaseIcon name="settings" :size="20" />
-        </RouterLink>
-      </nav>
+      <AppNav class="app-shell__top-nav" />
     </header>
 
     <main id="main-content" class="app-shell__main">
@@ -42,6 +37,10 @@ onMounted(() => {
       </RouterView>
     </main>
 
+    <nav class="app-shell__bottom" aria-label="Navegación inferior">
+      <AppNav />
+    </nav>
+
     <div v-if="installable" class="app-shell__install" role="dialog">
       <p>Instala Cantoral en tu dispositivo para acceso offline completo.</p>
       <button type="button" @click="promptInstall">Instalar</button>
@@ -53,7 +52,8 @@ onMounted(() => {
 .app-shell {
   min-height: 100dvh;
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: minmax(0, 1fr);
 }
 .skip-link {
   position: absolute;
@@ -85,6 +85,7 @@ onMounted(() => {
   top: 0;
   z-index: 10;
   backdrop-filter: blur(6px);
+  gap: var(--space-3);
 }
 .app-shell__brand {
   display: inline-flex;
@@ -94,34 +95,40 @@ onMounted(() => {
   color: var(--color-primary);
   font-size: var(--font-size-lg);
 }
-.app-shell__nav {
-  display: inline-flex;
-  gap: var(--space-1);
-}
-.app-shell__nav a {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--space-2);
-  border-radius: var(--radius-md);
-  color: var(--color-text-muted);
-  min-width: 40px;
-  min-height: 40px;
-}
-.app-shell__nav a:hover,
-.app-shell__nav a.router-link-active {
-  background: var(--color-surface-2);
-  color: var(--color-primary);
+.app-shell__top-nav {
+  display: none;
 }
 .app-shell__main {
   padding: var(--space-4);
   max-width: var(--content-max-width);
   width: 100%;
   margin-inline: auto;
+  padding-bottom: calc(var(--space-4) + 76px);
 }
+.app-shell__bottom {
+  position: sticky;
+  bottom: 0;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface);
+  z-index: 10;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+@media (min-width: 768px) {
+  .app-shell__top-nav {
+    display: inline-flex;
+  }
+  .app-shell__bottom {
+    display: none;
+  }
+  .app-shell__main {
+    padding-bottom: var(--space-4);
+  }
+}
+
 .app-shell__install {
   position: fixed;
-  bottom: var(--space-4);
+  bottom: calc(76px + var(--space-2));
   left: var(--space-4);
   right: var(--space-4);
   background: var(--color-primary);
@@ -135,6 +142,12 @@ onMounted(() => {
   gap: var(--space-3);
   max-width: var(--content-max-width);
   margin-inline: auto;
+  z-index: 50;
+}
+@media (min-width: 768px) {
+  .app-shell__install {
+    bottom: var(--space-4);
+  }
 }
 .app-shell__install button {
   background: white;

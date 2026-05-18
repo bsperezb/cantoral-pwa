@@ -26,10 +26,14 @@ export const useSongsStore = defineStore('songs', () => {
   }
 
   async function getSong(id) {
-    const cached = await repo.get(id);
-    if (cached) return cached;
     const entry = manifest.value.find((s) => s.id === id);
-    if (!entry) throw new Error(`Canto desconocido: ${id}`);
+    const cached = await repo.get(id);
+    // Si el manifest tiene una versión distinta (hash cambiado), re-descarga y re-parsea.
+    if (cached && entry && cached.hash === entry.hash) return cached;
+    if (!entry) {
+      if (cached) return cached;
+      throw new Error(`Canto desconocido: ${id}`);
+    }
     const raw = await fetchSongRaw(entry.file);
     return repo.save(id, raw, { hash: entry.hash, size: entry.size });
   }

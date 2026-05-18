@@ -53,6 +53,43 @@ function stripFooter(lines) {
   return lines.slice(0, footerStart);
 }
 
+function looksLikeMusicalLine(line) {
+  if (!line || !line.trim()) return false;
+  if (isChordLine(line)) return true;
+  if (matchAsteriskMarker(line)) return true;
+  if (matchBareSectionMarker(line)) return true;
+  return false;
+}
+
+/**
+ * Corta comentarios finales del transcriptor (emails, despedidas).
+ * Heurística: si encontramos un email, recortamos hasta la última línea
+ * "musical" (acorde / marcador) previa — el bloque trailing es ruido.
+ */
+function stripTrailingComments(lines) {
+  const emailRe = /\S+@\S+\.[A-Za-z]{2,}/;
+  const emailIdx = lines.findIndex((l) => emailRe.test(l));
+  if (emailIdx === -1) return lines;
+  let lastMusicalIdx = -1;
+  for (let i = emailIdx - 1; i >= 0; i--) {
+    if (looksLikeMusicalLine(lines[i])) {
+      lastMusicalIdx = i;
+      break;
+    }
+  }
+  if (lastMusicalIdx === -1) return lines.slice(0, emailIdx);
+  // Si el último musical es una línea de acordes, preservar la letra inmediata si existe.
+  if (
+    isChordLine(lines[lastMusicalIdx]) &&
+    lines[lastMusicalIdx + 1] &&
+    lines[lastMusicalIdx + 1].trim() &&
+    !isChordLine(lines[lastMusicalIdx + 1])
+  ) {
+    return lines.slice(0, lastMusicalIdx + 2);
+  }
+  return lines.slice(0, lastMusicalIdx + 1);
+}
+
 /**
  * Heurística para decidir si una línea es marcador de sección sin corchetes.
  * Requiere: línea aislada, ≥3 letras, mayúsculas (permite números/espacios), y palabra reconocida.
@@ -67,6 +104,21 @@ function matchBareSectionMarker(line) {
   const word = m[1];
   if (!SECTION_MARKERS.has(word)) return null;
   return { label: trimmed.replace(/:$/, ''), type: mapSectionType(word) };
+}
+
+/**
+ * Detecta marcadores estilo `*Coro*`, `*Verso 2*`, `*Puente*`.
+ * En las hojas latinas el `*Coro*` suele indicar "repetir el coro aquí".
+ */
+function matchAsteriskMarker(line) {
+  const trimmed = line.trim();
+  const m = trimmed.match(/^\*([^*]+)\*$/);
+  if (!m) return null;
+  const inner = m[1].trim();
+  if (!inner) return null;
+  const word = inner.split(/\s+/)[0].toUpperCase();
+  if (!SECTION_MARKERS.has(word)) return null;
+  return { label: titleCase(inner), type: mapSectionType(word), reference: true };
 }
 
 function matchInlineIntro(line) {
@@ -149,6 +201,20 @@ function parseBody(bodyLines) {
       continue;
     }
 
+    const asterisk = matchAsteriskMarker(line);
+    if (asterisk) {
+      pushCurrent();
+      // Marcador-referencia: sin contenido propio (apunta a una sección previa).
+      sections.push({
+        type: asterisk.type,
+        label: asterisk.label,
+        lines: [],
+        isReference: true,
+      });
+      current = { type: 'verse', label: null, raw: [] };
+      continue;
+    }
+
     const marker = matchBareSectionMarker(line);
     if (marker) {
       pushCurrent();
@@ -179,7 +245,8 @@ export function parseLaCuerda(text, options = {}) {
   const allLines = text.split('\n');
   const { meta, bodyStart } = parseHeader(allLines);
   const withoutFooter = stripFooter(allLines.slice(bodyStart));
-  const sections = parseBody(withoutFooter);
+  const withoutComments = stripTrailingComments(withoutFooter);
+  const sections = parseBody(withoutComments);
 
   const title = meta.title ?? options.fallbackId ?? 'Sin título';
   const id = options.fallbackId ?? slugify(title);

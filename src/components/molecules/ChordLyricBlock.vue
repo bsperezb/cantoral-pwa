@@ -39,14 +39,14 @@ const chordLine = computed(() => {
 .chord-lyric {
   margin-block: var(--space-1);
   font-family: var(--font-mono);
+  min-width: 0;
 }
 .chord-lyric__chords {
   margin: 0;
   color: var(--color-chord);
   font-weight: 700;
-  font-size: var(--font-size-sm);
+  font-size: calc(var(--font-size-sm) * var(--song-fit-scale, 1));
   white-space: pre;
-  overflow-x: auto;
   line-height: var(--line-height-tight);
   font-family: var(--font-mono);
 }
@@ -54,8 +54,8 @@ const chordLine = computed(() => {
   margin: 0;
   color: var(--color-text);
   font-family: var(--font-mono);
-  font-size: var(--font-size-base);
-  white-space: pre-wrap;
+  font-size: calc(var(--font-size-base) * var(--song-fit-scale, 1));
+  white-space: pre;
   line-height: var(--line-height-normal);
 }
 </style>

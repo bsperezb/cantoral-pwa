@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import ChordLyricBlock from '../molecules/ChordLyricBlock.vue';
 import ChordLine from '../molecules/ChordLine.vue';
 
@@ -29,10 +29,62 @@ const sectionTitle = (section) => {
 };
 
 const hasSections = computed(() => props.song.sections?.length > 0);
+
+// Fit-to-width: reduce la tipografía justo lo necesario para que la línea
+// más ancha (acordes o letra) entre sin scroll horizontal. Reset → medir → escalar.
+const MIN_SCALE = 0.5;
+const root = ref(null);
+const fitScale = ref(1);
+let observer = null;
+let measuring = false;
+
+const measure = async () => {
+  if (!root.value || measuring) return;
+  measuring = true;
+  fitScale.value = 1;
+  await nextTick();
+  const sections = root.value.querySelectorAll('.song-viewer__section');
+  let scale = 1;
+  for (const section of sections) {
+    const available = section.clientWidth;
+    if (!available) continue;
+    const candidates = section.querySelectorAll(
+      '.chord-lyric__chords, .chord-lyric__text, .song-viewer__lyric, .chord-line'
+    );
+    let needed = 0;
+    candidates.forEach((el) => {
+      if (el.scrollWidth > needed) needed = el.scrollWidth;
+    });
+    if (needed > available) {
+      scale = Math.min(scale, available / needed);
+    }
+  }
+  fitScale.value = Math.max(MIN_SCALE, scale);
+  measuring = false;
+};
+
+const scheduleMeasure = () => {
+  nextTick(measure);
+};
+
+onMounted(() => {
+  scheduleMeasure();
+  if (typeof ResizeObserver !== 'undefined') {
+    observer = new ResizeObserver(() => scheduleMeasure());
+    if (root.value) observer.observe(root.value);
+  }
+});
+
+onBeforeUnmount(() => {
+  observer?.disconnect();
+  observer = null;
+});
+
+watch(() => [props.song, props.transform], scheduleMeasure);
 </script>
 
 <template>
-  <article class="song-viewer">
+  <article class="song-viewer" ref="root" :style="{ '--song-fit-scale': fitScale }">
     <header class="song-viewer__header">
       <h1 class="song-viewer__title">{{ song.metadata.title }}</h1>
       <p v-if="song.metadata.artist" class="song-viewer__artist">{{ song.metadata.artist }}</p>
@@ -50,10 +102,15 @@ const hasSections = computed(() => props.song.sections?.length > 0);
       <section
         v-for="(section, i) in song.sections"
         :key="i"
-        :class="['song-viewer__section', `song-viewer__section--${section.type}`]"
+        :class="[
+          'song-viewer__section',
+          `song-viewer__section--${section.type}`,
+          { 'song-viewer__section--ref': section.isReference },
+        ]"
       >
         <h2 v-if="sectionTitle(section)" class="song-viewer__section-title">
-          {{ sectionTitle(section) }}
+          <span v-if="section.isReference" aria-hidden="true">↺ </span>
+          {{ sectionTitle(section) }}<span v-if="section.isReference"> (repetir)</span>
         </h2>
         <template v-for="(line, j) in section.lines" :key="j">
           <ChordLyricBlock
@@ -81,6 +138,7 @@ const hasSections = computed(() => props.song.sections?.length > 0);
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
+  min-width: 0;
 }
 .song-viewer__header {
   border-bottom: 1px solid var(--color-border);
@@ -105,12 +163,15 @@ const hasSections = computed(() => props.song.sections?.length > 0);
   display: flex;
   flex-direction: column;
   gap: var(--space-5);
+  min-width: 0;
 }
 .song-viewer__section {
   padding: var(--space-3);
   border-radius: var(--radius-md);
   background: var(--color-surface);
   border-left: 3px solid var(--color-primary);
+  min-width: 0;
+  overflow: hidden;
 }
 .song-viewer__section--chorus {
   background: color-mix(in srgb, var(--color-primary) 6%, var(--color-surface));
@@ -118,6 +179,18 @@ const hasSections = computed(() => props.song.sections?.length > 0);
 }
 .song-viewer__section--intro {
   border-left-color: var(--color-text-muted);
+}
+.song-viewer__section--ref {
+  background: transparent;
+  border-style: dashed;
+  border-width: 1px;
+  border-left-width: 3px;
+  padding-block: var(--space-2);
+}
+.song-viewer__section--ref .song-viewer__section-title {
+  font-style: italic;
+  color: var(--color-primary);
+  margin: 0;
 }
 .song-viewer__section-title {
   margin: 0 0 var(--space-2);
@@ -131,6 +204,7 @@ const hasSections = computed(() => props.song.sections?.length > 0);
   margin: 0;
   font-family: var(--font-mono);
   white-space: pre-wrap;
+  font-size: calc(var(--font-size-base) * var(--song-fit-scale, 1));
 }
 .song-viewer__gap {
   height: var(--space-2);

@@ -1,5 +1,42 @@
 import { ENGLISH_CHORD_RE, LATIN_CHORD_RE } from './constants.js';
 
+const LATIN_CHORD_RE_I = new RegExp(LATIN_CHORD_RE.source, 'i');
+
+const LATIN_ROOT_NORMALIZE = new Map([
+  ['do', 'Do'],
+  ['re', 'Re'],
+  ['mi', 'Mi'],
+  ['fa', 'Fa'],
+  ['sol', 'Sol'],
+  ['la', 'La'],
+  ['si', 'Si'],
+]);
+
+/**
+ * Normaliza un acorde a su forma canónica.
+ * - Inglés: respeta mayúsculas en la raíz (sin cambios).
+ * - Latino: acepta cualquier caja en la raíz (DO/do/Do → Do); calidad pasa a minúsculas.
+ */
+export function normalizeChordToken(token) {
+  if (!token) return token;
+  const cleaned = token.replace(/[(),.;:]/g, '').trim();
+  if (!cleaned) return cleaned;
+  if (ENGLISH_CHORD_RE.test(cleaned)) return cleaned;
+  const la = cleaned.match(LATIN_CHORD_RE_I);
+  if (la) {
+    const root = LATIN_ROOT_NORMALIZE.get(la[1].toLowerCase()) ?? la[1];
+    const accidental = la[2] ?? '';
+    const quality = (la[3] ?? '').toLowerCase();
+    let result = root + accidental + quality;
+    if (la[4]) {
+      const bassRoot = LATIN_ROOT_NORMALIZE.get(la[4].toLowerCase()) ?? la[4];
+      result += '/' + bassRoot + (la[5] ?? '');
+    }
+    return result;
+  }
+  return cleaned;
+}
+
 /**
  * Comprueba si un token individual es un acorde válido (inglés o latino).
  * @param {string} token
@@ -9,7 +46,8 @@ export function isChordToken(token) {
   if (!token) return false;
   const cleaned = token.replace(/[(),.;:]/g, '').trim();
   if (cleaned.length === 0) return false;
-  return ENGLISH_CHORD_RE.test(cleaned) || LATIN_CHORD_RE.test(cleaned);
+  if (ENGLISH_CHORD_RE.test(cleaned)) return true;
+  return LATIN_CHORD_RE_I.test(cleaned);
 }
 
 /**
@@ -45,7 +83,7 @@ export function extractChordsWithPositions(line) {
   while ((match = re.exec(line)) !== null) {
     const token = match[0];
     if (isChordToken(token)) {
-      result.push({ chord: token, column: match.index });
+      result.push({ chord: normalizeChordToken(token), column: match.index });
     }
   }
   return result;
@@ -57,7 +95,7 @@ export function extractChordsWithPositions(line) {
  * @returns {{ root: string, accidental: string|null, quality: string, bassRoot: string|null, bassAccidental: string|null, notation: 'english'|'latin' } | null}
  */
 export function parseChord(chord) {
-  const cleaned = chord.replace(/[(),.;:]/g, '').trim();
+  const cleaned = normalizeChordToken(chord);
   const en = cleaned.match(ENGLISH_CHORD_RE);
   if (en) {
     return {

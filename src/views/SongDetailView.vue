@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue';
-import { RouterLink } from 'vue-router';
+import { RouterLink, useRoute } from 'vue-router';
 import { useSongsStore } from '../stores/songs.store.js';
 import { usePreferencesStore } from '../stores/preferences.store.js';
 import { useTranspose } from '../composables/useTranspose.js';
@@ -12,6 +12,20 @@ import BaseIcon from '../components/atoms/BaseIcon.vue';
 const props = defineProps({ id: { type: String, required: true } });
 const songsStore = useSongsStore();
 const prefs = usePreferencesStore();
+const route = useRoute();
+
+const backTarget = computed(() => {
+  const rep = route.query.rep;
+  if (rep) {
+    return {
+      name: 'repertoire-present',
+      params: { id: rep },
+      query: route.query.moment != null ? { moment: route.query.moment } : undefined,
+    };
+  }
+  return { name: 'home' };
+});
+const backLabel = computed(() => (route.query.rep ? 'Volver al repertorio' : 'Volver'));
 
 const record = ref(null);
 const loading = ref(true);
@@ -55,9 +69,9 @@ watch(() => props.id, load);
 <template>
   <div class="song-detail">
     <nav class="song-detail__nav">
-      <RouterLink :to="{ name: 'home' }" class="song-detail__back" aria-label="Volver">
+      <RouterLink :to="backTarget" class="song-detail__back" :aria-label="backLabel">
         <BaseIcon name="back" :size="20" />
-        <span>Volver</span>
+        <span>{{ backLabel }}</span>
       </RouterLink>
     </nav>
 

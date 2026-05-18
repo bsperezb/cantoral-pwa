@@ -15,3 +15,6 @@ public/songs/index.json
 *storybook.log
 
 design/
+.playwright-mcp/
+.claude/
+PLAN.md
