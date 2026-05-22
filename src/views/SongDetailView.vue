@@ -124,6 +124,9 @@ watch(() => props.id, load);
   padding-block: var(--space-2);
   background: color-mix(in srgb, var(--color-bg) 90%, transparent);
   backdrop-filter: blur(6px);
+  @media (max-width: 768px) {
+    top: 52px;
+  }
 }
 .song-detail__status {
   text-align: center;
